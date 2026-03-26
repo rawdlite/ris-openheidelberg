@@ -1,5 +1,7 @@
-import psycopg2
+import psycopg
 import pandas as pd
+from typing import Optional, Dict, Any, Tuple
+from src.config import Config
 
 class PostgresDBClient:
     """
@@ -14,7 +16,7 @@ class PostgresDBClient:
         Args:
             config (Optional[Dict[str, Any]]): Database configuration dictionary.
         """
-        self.config = config
+        self.config = config or Config().get("postgresDB")
         self.conn = None
         self.cursor = None
         
@@ -22,7 +24,7 @@ class PostgresDBClient:
         """
         Connect to the database.
         """
-        self.conn = psycopg2.connect(**self.config)
+        self.conn = psycopg.connect(**self.config)
         self.cursor = self.conn.cursor()
         
     def disconnect(self):
